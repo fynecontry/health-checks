@@ -3,6 +3,8 @@ import os
 import shutil
 import sys
 import psutil
+import socket
+
 
 def check_reboot():
     """Returns True if a reboot is required"""
@@ -27,11 +29,20 @@ def check_cpu_constrained():
     """Returns True if the CPU is having too much usage, False otherwise"""
     return psutil.cpu_percent(1) > 75
 
+def check_no_network():
+    """Return True if it fail's to resolve Google's URL, False otherwise"""
+    try:
+        socket.gethostbyname("www.google.com")
+        return False
+    except:
+        return True
+
 def main():
     checks=[
         (check_reboot,"Pending Reboot"),
         (check_root_full, "Root partition full"),
         (check_cpu_constrained, "CPU load is too high"),
+        (check_no_network, "No working network"),
     ]
 
     everything_ok = True

@@ -18,6 +18,8 @@ check_cpu_constrained(): Returns True if the CPU is having too much usage, False
 
 check_no_network(): Return True if it fail's to resolve Google's URL, False otherwise
 
+check_system_logs(): Return True if critical errors are found in kern or sys logs, False otherwise
+
 After running checks "Everything is Ok" will be printed if no errors,
 otherwise corresponding error message will be displayed.
 

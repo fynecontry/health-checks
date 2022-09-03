@@ -37,12 +37,27 @@ def check_no_network():
     except:
         return True
 
+def check_system_logs():
+    """Return True if critical errors are found in kern or sys logs, False otherwise"""
+    critical_error_present = False
+    for log_path in ['/var/log/kern.log', '/var/log/syslog']:
+        try:
+            with open(log_path) as log_file:
+                for line in log_file:
+                    if 'critical' in line.lower():
+                        print(f'{line}')
+                        critical_error_present = True
+        except:
+            print(f'Could not locate log file: {log_path}')
+    return critical_error_present
+
 def main():
     checks=[
         (check_reboot,"Pending Reboot"),
         (check_root_full, "Root partition full"),
         (check_cpu_constrained, "CPU load is too high"),
         (check_no_network, "No working network"),
+        (check_system_logs, "Errors found in logs"),
     ]
 
     everything_ok = True
